@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import { STREAM_CLIENT } from './streaming.client.provider';
 import { KeyStreamDto } from './dto/key-stream.dto';
-import { StreamingEvent, StreamName } from 'src/constants/streaming.constants';
+import {  StreamName } from 'src/constants/streaming.constants';
 
 @Injectable()
 export class StreamingProducerService {
