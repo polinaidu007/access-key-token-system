@@ -1,5 +1,5 @@
 // src/admin/admin.service.ts
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { KeyStoreService } from '../db/key-store.service';
 import { StreamingProducerService } from '../streaming/streaming.producer.service';
 import { StreamingEvent, StreamName } from 'src/constants/streaming.constants';
@@ -38,7 +38,7 @@ export class AdminService {
 
   async updateKey(key: string, newData: any) {
     const existing = await this.keyStore.getAccessKey(key);
-    if (!existing) throw new Error('404: Key not found');
+    if (!existing) throw new NotFoundException('Key not found');
 
     const updated = { ...existing, ...newData };
     await this.keyStore.setAccessKey(key, updated);
