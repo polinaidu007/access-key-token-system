@@ -16,11 +16,11 @@ export class AdminController {
     return this.adminService.createKey(body);
   }
 
-  @Get('key/:id')
-  @ApiOperation({ summary: 'Get key by ID' })
-  getKey(@Param('id') key: string) {
-    return this.adminService.getKey(key);
-  }
+  // @Get('key/:id')
+  // @ApiOperation({ summary: 'Get key by ID' })
+  // getKey(@Param('id') key: string) {
+  //   return this.adminService.getKey(key);
+  // }
 
   @Get('keys')
   @ApiOperation({ summary: 'List all keys' })
