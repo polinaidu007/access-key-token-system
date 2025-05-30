@@ -1,5 +1,5 @@
 // db/key-store.service.ts
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import Redis from 'ioredis';
 import { DB_CLIENT } from './db.client.provider';
 import { AccessKeyRecordDto } from './dto/access-key-record.dto';
@@ -9,6 +9,7 @@ const RATE_LIMIT_PREFIX = `RATE_LIMIT`
 
 @Injectable()
 export class AccessKeyDbService {
+  private readonly logger = new Logger(AccessKeyDbService.name);
   constructor(@Inject(DB_CLIENT) private readonly redis: Redis) { }
 
   async setAccessKey(key: string, value: AccessKeyRecordDto) {
@@ -25,9 +26,10 @@ export class AccessKeyDbService {
   }
 
   async isWithinRateLimit(key: string, rateLimitPerMin: number): Promise<boolean> {
+    const logKey = `isWithinRateLimit:`
     const count = await this.redis.incr(`${RATE_LIMIT_PREFIX}:${key}`);
     if (count === 1) await this.redis.expire(`${RATE_LIMIT_PREFIX}:${key}`, 60); // 1-minute window
-    console.log({key, count})
+    this.logger.debug(`${logKey} ${JSON.stringify({key, rateLimitPerMin, count})}`);
     return count <= rateLimitPerMin;
   }
 }

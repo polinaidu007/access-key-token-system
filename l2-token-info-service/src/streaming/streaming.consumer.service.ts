@@ -91,7 +91,7 @@ export class StreamingConsumerService implements OnModuleInit {
                     expiresAt : Number(rest.expiresAt),
                     rateLimitPerMin : Number(rest.rateLimitPerMin)
                 });
-                this.logger.log(`Access key '${key}' cached`);
+                this.logger.log(`Access key '${key}' created`);
                 break;
 
             case StreamingEvent.KEY_DELETED:
