@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  redis-l1:
+    image: redis:6.2
+    container_name: redis-l1
+    ports:
+      - "6379:6379"
+
+  redis-l2:
+    image: redis:6.2
+    container_name: redis-l2
+    ports:
+      - "6380:6379"  # internal redis runs on 6379, exposed as 6380
+
+  l1-service:
+    build:
+      context: ./l1-access-key-management-service
+    container_name: l1-service
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: redis-l1
+      DB_PORT: 6379
+      DB_NUMBER: 0
+      MQ_HOST: redis-l1
+      MQ_PORT: 6379
+      MQ_NUMBER: 0
+      PORT: 3000
+    depends_on:
+      - redis-l1
+
+  l2-service:
+    build:
+      context: ./l2-token-info-service
+    container_name: l2-service
+    ports:
+      - "3001:3001"
+    environment:
+      DB_HOST: redis-l2
+      DB_PORT: 6379
+      DB_NUMBER: 0
+      MQ_HOST: redis-l1
+      MQ_PORT: 6379
+      MQ_NUMBER: 0
+      PORT: 3001
+    depends_on:
+      - redis-l1
+      - redis-l2
