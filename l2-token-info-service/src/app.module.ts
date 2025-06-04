@@ -6,6 +6,7 @@ import { TokenController } from './token/token.controller';
 import { TokenService } from './token/token.service';
 import { ConfigModule } from '@nestjs/config';
 import { StreamingModule } from './streaming/streaming.module';
+import { StrategyFactory } from './token/token-info/strategy.factory';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { StreamingModule } from './streaming/streaming.module';
     StreamingModule
   ],
   controllers: [AppController, TokenController],
-  providers: [AppService, TokenService],
+  providers: [AppService, TokenService, StrategyFactory],
 })
 export class AppModule {}

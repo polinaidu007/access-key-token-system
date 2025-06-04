@@ -9,6 +9,7 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { TokenService } from './token.service';
 import { AccessKeyGuard } from 'src/common/guards/access-key.guard';
+import { PlatformName } from './enum/platformName.enum';
 
 @ApiTags('token')
 @Controller('token')
@@ -19,8 +20,9 @@ export class TokenController {
   @UseGuards(AccessKeyGuard)
   @ApiOperation({ summary: 'Get tokenInfo by tokenId (key validated by guard)' })
   @ApiQuery({ name: 'tokenId', required: true })
+  @ApiQuery({ name: 'platform', enum: PlatformName, required: true }) 
   @ApiBearerAuth()
-  async validate(@Query('tokenId') tokenId: string) {
-    return await this.tokenService.getTokenInfo(tokenId)
+  async validate(@Query('tokenId') tokenId: string, @Query('platform') platform : PlatformName) {
+    return await this.tokenService.getTokenInfo(tokenId, platform)
   }
 }
